@@ -12,7 +12,7 @@ permalink: /downloads/
     <span class="text-3xl">📄</span><div><p class="font-medium">产品需求文档模板.docx</p></div>
   </a>
   <a href="/downloads/year-review.pdf" class="bg-white rounded-2xl p-6 shadow-sm card-hover flex items-center gap-4 no-underline">
-    <span class="text-3xl">📊</span><div><p class="font-medium">个人年度复盘模板.pdf</p></div>
+    <span class="1">📊</span><div><p class="font-medium">个1.docx</p></div>
   </a>
   <!-- 你可以照着上面的格式继续添加文件，把 href 改成你 downloads 文件夹里的文件名 -->
 </div>
