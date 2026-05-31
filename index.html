@@ -1,209 +1,218 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人博客</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-                    },
-                }
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的个人空间</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#0071e3',
+            bgray: '#f5f5f7',
+            tdark: '#1d1d1f',
+          }
         }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .text-balance {
-                text-wrap: balance;
-            }
-            .card-hover {
-                @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary-200 dark:hover:border-primary-800;
-            }
-            .bg-blur {
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-            }
-            .gradient-bg {
-                background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #f8fafc 100%);
-            }
-            .dark .gradient-bg {
-                background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            }
-            .editor-textarea {
-                @apply w-full h-full bg-transparent resize-none focus:outline-none font-mono text-sm leading-relaxed;
-            }
-        }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #f5f5f7; }
+    .card-hover { transition: all 0.25s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 35px -12px rgba(0,0,0,0.12); }
+    .view { display: none; }
+    .view.active { display: block; }
+    .nav-active { color: #0071e3; font-weight: 600; }
+  </style>
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-500 min-h-screen flex flex-col font-sans">
-    <!-- 导航栏 -->
-    <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 bg-blur border-b border-gray-100 dark:border-gray-800">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="#" class="flex items-center space-x-2">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white">
-                            <i class="fa fa-code"></i>
-                        </div>
-                        <span class="font-bold text-xl">我的博客</span>
-                    </a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="nav-link font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">首页</a>
-                    <a href="#about" class="nav-link font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">关于我</a>
-                    <a href="#articles" class="nav-link font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">文章</a>
-                </div>
-                
-                <div class="flex items-center space-x-3">
-                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                        <i class="fa fa-moon-o dark:hidden text-gray-600"></i>
-                        <i class="fa fa-sun-o hidden dark:inline text-gray-300"></i>
-                    </button>
-                    <button id="admin-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="管理">
-                        <i class="fa fa-cog text-gray-600 dark:text-gray-300"></i>
-                    </button>
-                    <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                        <i class="fa fa-bars text-gray-600 dark:text-gray-300"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 移动端菜单 -->
-        <div id="mobile-menu" class="md:hidden hidden border-t border-gray-100 dark:border-gray-800">
-            <div class="container mx-auto px-4 py-3 space-y-3">
-                <a href="#" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">首页</a>
-                <a href="#about" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">关于我</a>
-                <a href="#articles" class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">文章</a>
-                <button id="mobile-new-post" class="w-full text-left py-2 text-primary-600 dark:text-primary-400 font-medium">
-                    <i class="fa fa-plus mr-2"></i>发布新文章
-                </button>
-            </div>
-        </div>
-    </header>
+<body class="font-sans text-tdark antialiased">
 
-    <!-- 搜索模态框 -->
-    <div id="search-modal" class="fixed inset-0 z-50 hidden bg-black/40 flex items-start justify-center pt-24 px-4">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
-            <div class="p-5 border-b border-gray-100 dark:border-gray-700 flex items-center">
-                <i class="fa fa-search text-gray-400 mr-4 text-lg"></i>
-                <input id="search-input" type="text" placeholder="搜索文章标题或内容..." class="w-full bg-transparent focus:outline-none text-lg">
-                <button id="search-close" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <i class="fa fa-times text-gray-500"></i>
-                </button>
-            </div>
-            <div id="search-results" class="max-h-96 overflow-y-auto p-3">
-                <div class="text-center py-12 text-gray-500 dark:text-gray-400">
-                    <i class="fa fa-search text-4xl mb-4 text-gray-300 dark:text-gray-600"></i>
-                    <p>输入关键词开始搜索</p>
-                </div>
-            </div>
-        </div>
+  <!-- 导航栏 -->
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#home" class="text-xl font-bold tracking-tight">My Space</a>
+      <nav class="flex gap-8 text-sm font-medium">
+        <a href="#home" class="nav-link hover:text-primary transition">首页</a>
+        <a href="#blog" class="nav-link hover:text-primary transition">文章</a>
+        <a href="#thoughts" class="nav-link hover:text-primary transition">想法</a>
+        <a href="#downloads" class="nav-link hover:text-primary transition">下载</a>
+      </nav>
     </div>
+  </header>
 
-    <!-- 管理员认证模态框 -->
-    <div id="auth-modal" class="fixed inset-0 z-50 hidden bg-black/40 flex items-center justify-center px-4">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 dark:border-gray-700">
-            <div class="p-8">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mx-auto mb-4">
-                        <i class="fa fa-lock text-2xl text-primary-600 dark:text-primary-400"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">管理员认证</h3>
-                    <p class="text-gray-600 dark:text-gray-400">
-                        输入你的 GitHub 个人访问令牌以获得发布和编辑文章的权限
-                    </p>
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">GitHub 个人访问令牌</label>
-                    <input id="auth-token" type="password" class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-                </div>
-                <div class="text-sm text-gray-500 dark:text-gray-500 mb-6 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl">
-                    <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">
-                        如何获取个人访问令牌？
-                    </a>
-                    <p class="mt-2">请确保令牌具有 <code class="bg-white dark:bg-gray-800 px-2 py-1 rounded text-xs">repo</code> 权限</p>
-                </div>
-                <div class="flex justify-end space-x-3">
-                    <button id="auth-cancel" class="px-6 py-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium">
-                        取消
-                    </button>
-                    <button id="auth-submit" class="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-xl transition-colors font-medium shadow-lg shadow-primary-600/20">
-                        验证并登录
-                    </button>
-                </div>
-            </div>
+  <!-- 内容容器 -->
+  <main class="max-w-6xl mx-auto px-4 py-12">
+
+    <!-- ===== 首页视图 ===== -->
+    <section id="home-view" class="view active">
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-24">
+        <div>
+          <h1 class="text-5xl font-bold leading-tight tracking-tight mb-6">
+            想法被看见<br/>知识被分享
+          </h1>
+          <p class="text-lg text-gray-500 mb-8">
+            这里记录着我的思考、收藏的文章，以及一些可能有用的资料。
+          </p>
+          <a href="#blog" class="inline-block bg-primary text-white px-8 py-3 rounded-full font-medium shadow-md hover:shadow-lg hover:bg-blue-700 transition">
+            浏览文章
+          </a>
         </div>
-    </div>
+        <div class="bg-white rounded-2xl shadow-xl p-8 aspect-square flex items-center justify-center">
+          <svg width="160" height="160" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="96" stroke="#0071e3" stroke-width="6" stroke-dasharray="12 12" opacity="0.3"/>
+            <circle cx="100" cy="100" r="60" fill="#0071e3" opacity="0.1"/>
+            <circle cx="100" cy="100" r="36" fill="#0071e3" opacity="0.4"/>
+            <rect x="94" y="60" width="12" height="12" rx="4" fill="#0071e3"/>
+            <rect x="70" y="100" width="12" height="12" rx="4" fill="#0071e3"/>
+            <rect x="118" y="100" width="12" height="12" rx="4" fill="#0071e3"/>
+            <rect x="94" y="128" width="12" height="12" rx="4" fill="#0071e3"/>
+          </svg>
+        </div>
+      </div>
+      <!-- 最新动态卡片 -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-2xl p-8 shadow-sm card-hover">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">最新文章</span>
+          <h3 class="text-xl font-bold mt-2" id="latest-blog-title">如何构建个人知识库</h3>
+          <p class="text-gray-500 mt-2 text-sm" id="latest-blog-desc">从信息收集到输出，一套可循环的系统。</p>
+          <a href="#blog" class="text-primary font-medium text-sm mt-4 inline-block">阅读更多 →</a>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm card-hover">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">最近想法</span>
+          <h3 class="text-xl font-bold mt-2" id="latest-thought-title">“少即是多”在数字生活中的实践</h3>
+          <p class="text-gray-500 mt-2 text-sm" id="latest-thought-desc">2025年，我减少了80%的屏幕时间，收获了什么。</p>
+          <a href="#thoughts" class="text-primary font-medium text-sm mt-4 inline-block">查看全部想法 →</a>
+        </div>
+      </div>
+    </section>
 
-    <!-- 文章编辑器模态框 -->
-    <div id="editor-modal" class="fixed inset-0 z-50 hidden bg-black/40 overflow-y-auto">
-        <div class="min-h-screen flex items-start justify-center px-4 py-8">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl relative border border-gray-100 dark:border-gray-700">
-                <div class="sticky top-0 bg-white dark:bg-gray-800 p-5 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center z-10 rounded-t-2xl">
-                    <h3 id="editor-title" class="text-xl font-bold">发布新文章</h3>
-                    <div class="flex items-center space-x-2">
-                        <button id="editor-preview-toggle" class="px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium">
-                            <i class="fa fa-eye mr-2"></i>预览
-                        </button>
-                        <button id="editor-close" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <i class="fa fa-times text-gray-500"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="p-6">
-                    <div class="mb-5">
-                        <input id="post-title" type="text" class="w-full px-5 py-4 text-2xl font-bold border border-gray-200 dark:border-gray-700 rounded-xl bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" placeholder="输入一个吸引人的文章标题">
-                    </div>
-                    
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">文章标签（用逗号分隔）</label>
-                        <input id="post-tags" type="text" class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-transparent focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" placeholder="技术, JavaScript, Web开发">
-                    </div>
-                    
-                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" style="height: 550px;">
-                        <div id="editor-container" class="h-full">
-                            <textarea id="post-content" class="editor-textarea p-5" placeholder="在这里使用 Markdown 格式编写你的文章内容...
+    <!-- ===== 文章视图 ===== -->
+    <section id="blog-view" class="view">
+      <h2 class="text-4xl font-bold mb-2">文章</h2>
+      <p class="text-gray-500 mb-10">深度阅读与分享</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-list"></div>
+    </section>
 
-# 一级标题
-## 二级标题
+    <!-- ===== 想法视图 ===== -->
+    <section id="thoughts-view" class="view">
+      <h2 class="text-4xl font-bold mb-2">闪念</h2>
+      <p class="text-gray-500 mb-10">短思考，随时记录</p>
+      <div class="space-y-6" id="thoughts-list"></div>
+    </section>
 
-**粗体文本**
-*斜体文本*
+    <!-- ===== 下载视图 ===== -->
+    <section id="downloads-view" class="view">
+      <h2 class="text-4xl font-bold mb-2">资料下载</h2>
+      <p class="text-gray-500 mb-10">部分文档、模板及参考资料</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="downloads-list"></div>
+    </section>
 
-- 无序列表项
-1. 有序列表项
+  </main>
 
-`行内代码`
+  <footer class="border-t border-gray-200 mt-20 py-8 text-center text-sm text-gray-400">
+    <p>© 2026 My Space. Powered by GitHub Pages.</p>
+  </footer>
 
-```javascript
-// 代码块
-function hello() {
-    console.log("Hello, World!");
-}
+  <script>
+    // ---------- 数据定义 ----------
+    const blogPosts = [
+      { title: '如何构建个人知识库', date: '2026-05-20', desc: '从信息收集到输出，一套可循环的系统。', slug: 'knowledge-base' },
+      { title: '远程工作的效率陷阱', date: '2026-04-15', desc: '自由与自律的平衡，我的三个关键方法。', slug: 'remote-work' },
+      { title: '重读《原子习惯》', date: '2026-03-10', desc: '微小改变的复利，如何真正落地。', slug: 'atomic-habits' },
+      { title: '设计中的留白哲学', date: '2026-02-01', desc: '从东方美学到现代UI，为什么“少”即是“多”。', slug: 'whitespace-design' }
+    ];
+
+    const thoughts = [
+      { content: '“少即是多”在数字生活中的实践：2025年我减少了80%的屏幕时间，收获了更多深度工作和真实交流。', date: '2026-05-28' },
+      { content: '好的工具应该像空气，感知不到存在。最近在优化自己的笔记流，目标是“无摩擦”。', date: '2026-05-15' },
+      { content: '信息焦虑的根源不是信息过载，而是缺乏过滤框架。建立自己的“认知栅栏”至关重要。', date: '2026-05-02' },
+      { content: 'AI 辅助写作让我更关注想法本身，而不是措辞。但最终的审美和判断仍需人类把关。', date: '2026-04-20' }
+    ];
+
+    const downloads = [
+      { name: '产品需求文档模板.docx', file: 'downloads/PRD-template.docx', icon: '📄' },
+      { name: '个人年度复盘模板.pdf', file: 'downloads/year-review.pdf', icon: '📊' },
+      { name: '设计系统色板指南.pdf', file: 'downloads/color-guide.pdf', icon: '🎨' },
+      { name: '阅读笔记模板.word', file: 'downloads/reading-notes.docx', icon: '📝' }
+    ];
+
+    // 首页动态更新
+    if (blogPosts.length) {
+      document.getElementById('latest-blog-title').textContent = blogPosts[0].title;
+      document.getElementById('latest-blog-desc').textContent = blogPosts[0].desc;
+    }
+    if (thoughts.length) {
+      document.getElementById('latest-thought-title').textContent = thoughts[0].content.slice(0, 30) + '...';
+      document.getElementById('latest-thought-desc').textContent = thoughts[0].date;
+    }
+
+    // 渲染文章列表
+    const blogContainer = document.getElementById('blog-list');
+    blogPosts.forEach(post => {
+      blogContainer.innerHTML += `
+        <div class="bg-white rounded-2xl p-6 shadow-sm card-hover flex flex-col">
+          <span class="text-xs text-gray-400">${post.date}</span>
+          <h3 class="text-lg font-semibold mt-2 mb-2">${post.title}</h3>
+          <p class="text-gray-500 text-sm flex-1">${post.desc}</p>
+          <span class="text-primary text-sm font-medium mt-4 cursor-pointer">阅读全文</span>
+        </div>`;
+    });
+
+    // 渲染想法列表
+    const thoughtsContainer = document.getElementById('thoughts-list');
+    thoughts.forEach(t => {
+      thoughtsContainer.innerHTML += `
+        <div class="bg-white rounded-2xl p-6 shadow-sm card-hover">
+          <p class="text-lg leading-relaxed">${t.content}</p>
+          <span class="text-xs text-gray-400 mt-3 block">${t.date}</span>
+        </div>`;
+    });
+
+    // 渲染下载列表
+    const downloadsContainer = document.getElementById('downloads-list');
+    downloads.forEach(d => {
+      downloadsContainer.innerHTML += `
+        <a href="${d.file}" class="bg-white rounded-2xl p-6 shadow-sm card-hover flex items-center gap-4 no-underline">
+          <span class="text-3xl">${d.icon}</span>
+          <div>
+            <p class="font-medium text-tdark">${d.name}</p>
+            <p class="text-xs text-gray-400">点击下载</p>
+          </div>
+        </a>`;
+    });
+
+    // ---------- 路由控制 ----------
+    const views = {
+      home: document.getElementById('home-view'),
+      blog: document.getElementById('blog-view'),
+      thoughts: document.getElementById('thoughts-view'),
+      downloads: document.getElementById('downloads-view')
+    };
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function setActiveView(hash) {
+      const name = hash.replace('#', '') || 'home';
+      Object.keys(views).forEach(key => views[key].classList.remove('active'));
+      if (views[name]) views[name].classList.add('active');
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        link.classList.toggle('nav-active', href === `#${name}`);
+      });
+    }
+
+    window.addEventListener('hashchange', () => setActiveView(window.location.hash));
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!window.location.hash) window.location.hash = '#home';
+      setActiveView(window.location.hash);
+    });
+  </script>
+</body>
+</html>
