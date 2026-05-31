@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boby's Blog</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #fafafa;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding-bottom: 2px;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Divider */
+        .divider {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .divider hr {
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Main */
+        .main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 24px 80px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Article Card */
+        .article-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .article-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-1px);
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .article-tag {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .article-tag.tag-share {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .article-tag.tag-file {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .article-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .article-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            font-size: 0.88rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: gap 0.2s;
+        }
+
+        .article-link:hover {
+            gap: 8px;
+        }
+
+        .article-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Article Detail View */
+        .article-detail {
+            display: none;
+        }
+
+        .article-detail.active {
+            display: block;
+        }
+
+        .article-list.hidden {
+            display: none;
+        }
+
+        .detail-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent);
+            font-size: 0.88rem;
+            font-weight: 500;
+            text-decoration: none;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: gap 0.2s;
+        }
+
+        .detail-back:hover {
+            gap: 10px;
+        }
+
+        .detail-back svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .detail-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .detail-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .detail-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .detail-content p {
+            margin-bottom: 16px;
+        }
+
+        .detail-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .detail-content a:hover {
+            text-decoration: underline;
+        }
+
+        .detail-content ul {
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .detail-content li {
+            margin-bottom: 8px;
+        }
+
+        .detail-content blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 12px 20px;
+            margin: 16px 0;
+            background: var(--accent-light);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            color: var(--text-secondary);
+        }
+
+        .detail-content img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            margin: 16px 0;
+        }
+
+        .detail-content h2 {
+            font-size: 1.3rem;
+            margin: 32px 0 16px;
+        }
+
+        .detail-content h3 {
+            font-size: 1.1rem;
+            margin: 24px 0 12px;
+        }
+
+        .detail-content code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .file-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.9rem;
+            margin: 8px 8px 8px 0;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .file-download:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent);
+        }
+
+        .file-download svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+        }
+
+        .file-download .file-name {
+            font-weight: 500;
+        }
+
+        .file-download .file-size {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        .footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header { padding: 40px 20px 28px; }
+            .header h1 { font-size: 1.7rem; }
+            .main { padding: 24px 20px 60px; }
+            .article-card { padding: 22px; }
+            .article-title { font-size: 1.1rem; }
+            .detail-title { font-size: 1.5rem; }
+            .nav-links { gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <h1>Boby's Blog</h1>
+    <p>记录想法，分享发现，沉淀知识。</p>
+    <nav class="nav-links">
+        <a href="#" class="active" onclick="showList(); return false;">文章</a>
+        <a href="#" onclick="showList(); return false;">分享</a>
+        <a href="#" onclick="showList(); return false;">文件</a>
+    </nav>
+</header>
+
+<div class="divider"><hr></div>
+
+<!-- Main Content -->
+<main class="main">
+
+    <!-- Article List View -->
+    <div class="article-list" id="articleList">
+        <div class="section-title">最新文章</div>
+
+        <!-- 文章卡片通过 JavaScript 渲染 -->
+    </div>
+
+    <!-- Article Detail View -->
+    <div class="article-detail" id="articleDetail">
+        <a class="detail-back" onclick="showList()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            返回列表
+        </a>
+        <h1 class="detail-title" id="detailTitle"></h1>
+        <div class="detail-meta" id="detailMeta"></div>
+        <div class="detail-content" id="detailContent"></div>
+    </div>
+
+</main>
+
+<div class="divider"><hr></div>
+
+<footer class="footer">
+    <p>&copy; 2025 Boby's Blog &middot; 使用 <a href="https://pages.github.com" target="_blank">GitHub Pages</a> 搭建</p>
+</footer>
+
+<script>
+// ============================================
+// 📝 文章数据 — 在这里添加或编辑文章
+// ============================================
+// 添加新文章只需在 articles 数组中添加一个新对象即可
+// type: "article" | "share" | "file"
+// ============================================
+
+const articles = [
+    {
+        id: 1,
+        type: "article",
+        title: "推荐一个超实用的生字训练工具 📝",
+        date: "2025-05-31",
+        tag: "推荐",
+        desc: "给家里小朋友做的语文生字练习网站，覆盖人教版1-4年级所有生字，支持组词、填空、写汉字等多种练习模式。",
+        content: `
+            <p>最近给家里小朋友做了一个<strong>语文生字练习</strong>的网站，经过一段时间的使用，效果非常好，分享给大家！</p>
+
+            <h2>✨ 功能亮点</h2>
+            <ul>
+                <li><strong>覆盖全面</strong> — 人教版1-4年级所有生字，按年级分类</li>
+                <li><strong>多种练习模式</strong> — 组词、填空、写汉字，全方位巩固</li>
+                <li><strong>自由配置</strong> — 支持10/20/30/50题，灵活选择练习量</li>
+                <li><strong>即时反馈</strong> — 做完立刻出结果，错题一目了然</li>
+            </ul>
+
+            <h2>🎯 适用人群</h2>
+            <p>小学1-4年级学生，家长也可以陪着一起练习，效果更好！</p>
+
+            <blockquote>
+                🌐 网站地址：<a href="http://bobyzhang.cc.cd/" target="_blank">bobyzhang.cc.cd</a> — 完全免费，打开即用，无需注册。
+            </blockquote>
+
+            <p>如果你家里也有正在学认字的小朋友，强烈推荐试试看！有任何建议也欢迎反馈 😊</p>
+        `
+    }
+];
+
+// ============================================
+// 🚀 渲染逻辑 — 一般不需要修改
+// ============================================
+
+function getTagHTML(article) {
+    const tagMap = {
+        article: { cls: '', label: article.tag || '文章' },
+        share: { cls: 'tag-share', label: article.tag || '分享' },
+        file: { cls: 'tag-file', label: article.tag || '文件' }
+    };
+    const t = tagMap[article.type] || tagMap.article;
+    return `<span class="article-tag ${t.cls}">${t.label}</span>`;
+}
+
+function renderList() {
+    const list = document.getElementById('articleList');
+    list.innerHTML = '<div class="section-title">最新文章</div>';
+
+    articles.forEach(a => {
+        const card = document.createElement('a');
+        card.className = 'article-card';
+        card.onclick = () => showDetail(a.id);
+        card.innerHTML = `
+            <div class="article-meta">
+                ${getTagHTML(a)}
+                <span>${a.date}</span>
+            </div>
+            <h2 class="article-title">${a.title}</h2>
+            <p class="article-desc">${a.desc}</p>
+            <span class="article-link">
+                阅读全文
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </span>
+        `;
+        list.appendChild(card);
+    });
+}
+
+function showDetail(id) {
+    const article = articles.find(a => a.id === id);
+    if (!article) return;
+
+    document.getElementById('articleList').classList.add('hidden');
+    const detail = document.getElementById('articleDetail');
+    detail.classList.add('active');
+
+    document.getElementById('detailTitle').textContent = article.title;
+    document.getElementById('detailMeta').innerHTML = `${getTagHTML(article)} &nbsp;·&nbsp; ${article.date}`;
+    document.getElementById('detailContent').innerHTML = article.content;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showList() {
+    document.getElementById('articleDetail').classList.remove('active');
+    document.getElementById('articleList').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Initialize
+renderList();
+</script>
+
+</body>
+</html>
