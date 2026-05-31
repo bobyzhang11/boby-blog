@@ -1,0 +1,20 @@
+title: My Space
+description: 想法被看见，知识被分享
+baseurl: ""
+url: "https://bobyzhang.bbroot.com"   # 改这里！！！
+
+# 如果以后想用“想法”这个栏目，我们需要定义 collection
+collections:
+  thoughts:
+    output: false
+
+# 默认模板
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+  - scope:
+      path: "_posts"
+    values:
+      permalink: /blog/:title/
