@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: { primary: '#0071e3', bgray: '#f5f5f7', tdark: '#1d1d1f' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #f5f5f7; }
+    .card-hover { transition: all 0.25s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 35px -12px rgba(0,0,0,0.12); }
+  </style>
+</head>
+<body class="font-sans text-tdark antialiased">
+  <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold tracking-tight">{{ site.title }}</a>
+      <nav class="flex gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-primary transition">首页</a>
+        <a href="/blog" class="hover:text-primary transition">文章</a>
+        <a href="/thoughts" class="hover:text-primary transition">想法</a>
+        <a href="/downloads" class="hover:text-primary transition">下载</a>
+      </nav>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-4 py-12">
+    {{ content }}
+  </main>
+  <footer class="border-t border-gray-200 mt-20 py-8 text-center text-sm text-gray-400">
+    <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. Powered by GitHub Pages.</p>
+  </footer>
+</body>
+</html>
